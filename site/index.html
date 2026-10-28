@@ -1,11 +1,145 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Coming soon</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earthshaker V1.0</title>
+<meta name="description" content="Advisory screening tool that ranks shortlisted data center sites on regulatory risk, cost, and community impact.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#9707;</text></svg>">
 </head>
 <body>
-  <p>Coming soon.</p>
+
+<div id="demo-banner" class="banner banner--demo" hidden>
+  <strong>DEMO DATA.</strong>
+  <span id="demo-banner-text"></span>
+</div>
+
+<header class="topbar">
+  <div class="topbar__title">
+    <h1>Earthshaker <span class="version">V1.0</span></h1>
+    <p class="tagline">
+      Advisory screening for shortlisted data center sites.
+      Ranks on regulatory risk, cost, and impact on neighbors.
+    </p>
+  </div>
+  <div class="topbar__meta">
+    <div><span class="k">Rubric</span> <span class="v" id="meta-rubric">—</span></div>
+    <div><span class="k">Dataset</span> <span class="v" id="meta-dataset">—</span></div>
+    <div><span class="k">Run</span> <span class="v" id="meta-timing">—</span></div>
+    <button id="btn-memo" class="btn btn--primary" type="button">Download decision memo</button>
+  </div>
+</header>
+
+<p class="advisory">
+  This tool <strong>advises and does not decide</strong>. It screens a shortlist that
+  upstream work produced; it does not find sites, generate profiles, or establish
+  feasibility. Nothing here is evidence of grid capacity, zoning approval, or a
+  utility commitment.
+</p>
+
+<main class="layout">
+
+  <!-- ─── left column: controls ─────────────────────────────── -->
+  <section class="panel panel--controls">
+    <h2>Priorities</h2>
+    <p class="hint">
+      Set by leadership. Weights are normalized to 100%, so moving one slider
+      changes the others' share.
+    </p>
+
+    <div class="sliders" id="sliders">
+      <label class="slider" data-key="regulatory">
+        <span class="slider__head">
+          <span class="slider__name">Regulatory risk</span>
+          <output class="slider__pct" data-out="regulatory">40%</output>
+        </span>
+        <input type="range" min="0" max="100" step="1" value="40" data-slider="regulatory">
+        <span class="slider__note">Zoning, permitting, protected land, interconnection timeline.</span>
+      </label>
+
+      <label class="slider" data-key="cost">
+        <span class="slider__head">
+          <span class="slider__name">Cost</span>
+          <output class="slider__pct" data-out="cost">35%</output>
+        </span>
+        <input type="range" min="0" max="100" step="1" value="35" data-slider="cost">
+        <span class="slider__note">Land, power, water, terrain, incentives.</span>
+      </label>
+
+      <label class="slider" data-key="community">
+        <span class="slider__head">
+          <span class="slider__name">Community &amp; environment</span>
+          <output class="slider__pct" data-out="community">25%</output>
+        </span>
+        <input type="range" min="0" max="100" step="1" value="25" data-slider="community">
+        <span class="slider__note">Nearby homes and schools, setback, current land use. Higher weight favors sites that disturb fewer neighbors.</span>
+      </label>
+    </div>
+
+    <div class="preset-row">
+      <button class="btn btn--ghost" data-preset="40,35,25" type="button">Balanced</button>
+      <button class="btn btn--ghost" data-preset="60,25,15" type="button">Risk-averse</button>
+      <button class="btn btn--ghost" data-preset="20,65,15" type="button">Cost-led</button>
+      <button class="btn btn--ghost" data-preset="25,25,50" type="button">Community-led</button>
+    </div>
+
+    <h2>Narrowing</h2>
+    <ol class="funnel" id="funnel"></ol>
+    <p class="hint">
+      Hard constraints are screened <em>before</em> scoring, so no weighting can
+      rescue an excluded site or promote a held one. Only steps 3 and 4 move when
+      you change the sliders.
+    </p>
+
+    <h2>How the score is built</h2>
+    <div class="formula" id="formula"></div>
+    <p class="hint">
+      Reported scores are <strong>pessimistic</strong>: an unknown factor
+      contributes zero. Missing data can never improve a site's position. The
+      ceiling shows where a site would land if every unknown resolved in its
+      favor, and completeness is reported separately from suitability.
+    </p>
+  </section>
+
+  <!-- ─── middle column: map + ranking ───────────────────────── -->
+  <section class="panel panel--map">
+    <div class="panel__head">
+      <h2>Schematic map</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="map-wrap">
+      <svg id="map" role="img" aria-label="Schematic map of candidate parcels"></svg>
+    </div>
+    <p class="hint hint--warn" id="map-note"></p>
+
+    <div class="panel__head">
+      <h2>Ranked candidates</h2>
+      <span class="hint" id="rank-note"></span>
+    </div>
+    <div class="table-wrap">
+      <table class="rank-table" id="rank-table"></table>
+    </div>
+  </section>
+
+  <!-- ─── right column: detail / compare ────────────────────── -->
+  <section class="panel panel--detail">
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" data-tab="detail" role="tab" type="button">Site detail</button>
+      <button class="tab" data-tab="compare" role="tab" type="button">Compare <span id="compare-count"></span></button>
+      <button class="tab" data-tab="sensitivity" role="tab" type="button">Sensitivity</button>
+    </div>
+    <div id="tab-detail" class="tabpane"></div>
+    <div id="tab-compare" class="tabpane" hidden></div>
+    <div id="tab-sensitivity" class="tabpane" hidden></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span id="foot-notice"></span>
+</footer>
+
+<script type="module" src="app.js"></script>
 </body>
 </html>

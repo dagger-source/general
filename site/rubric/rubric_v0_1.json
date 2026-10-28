@@ -1,0 +1,209 @@
+{
+  "version": "v0.1",
+  "name": "Earthshaker screening rubric",
+  "status": "DRAFT — not approved by the siting team",
+  "objective": "Minimize regulatory risk, cost, and harm to neighbors.",
+  "orientation": "Every criterion and factor is oriented so that a HIGHER score is always BETTER: lower regulatory risk, lower cost, less harm to neighbors and the surrounding environment.",
+  "notes": [
+    "Hard constraints are screened before scoring and are not tradeable against preferences.",
+    "A hard constraint whose input is missing yields 'unknown' and holds the site for verification. It never passes.",
+    "Factors marked imagery_can_verify=false can never be established from imagery. They come from the upstream profile and are labelled as reported, not measured.",
+    "Proximity to transmission infrastructure is deliberately absent from this rubric. Visible lines or substations are evidence of nearby infrastructure only, never of available interconnection capacity. Capacity must come from a utility study recorded in the profile."
+  ],
+  "hard_constraints": [
+    {
+      "id": "min_developable_area",
+      "label": "Minimum developable area",
+      "input": "evidence.developable_area_acres",
+      "test": { "type": "min", "value": 80 },
+      "rationale": "Below roughly 80 developable acres a campus of the target scale does not fit alongside setbacks, substation yard, and stormwater.",
+      "imagery_can_verify": true
+    },
+    {
+      "id": "zoning_not_denied",
+      "label": "Zoning not already denied",
+      "input": "profile.zoning_status",
+      "test": { "type": "not_in", "values": ["denied"] },
+      "rationale": "A recorded denial is a dead end for this parcel in the current cycle.",
+      "imagery_can_verify": false
+    },
+    {
+      "id": "protected_area_setback",
+      "label": "Protected area setback",
+      "input": "evidence.protected_area_distance_m",
+      "test": { "type": "min", "value": 100 },
+      "rationale": "Direct encroachment on a designated protected area is treated as disqualifying rather than as a cost.",
+      "imagery_can_verify": false
+    },
+    {
+      "id": "floodway_overlap",
+      "label": "Floodway overlap",
+      "input": "evidence.fema_floodway_overlap_pct",
+      "test": { "type": "max", "value": 2 },
+      "rationale": "Regulatory floodway cannot be filled or built in without a map revision; treat material overlap as disqualifying.",
+      "imagery_can_verify": false
+    },
+    {
+      "id": "wetland_overlap",
+      "label": "Wetland overlap",
+      "input": "evidence.wetland_overlap_pct",
+      "test": { "type": "max", "value": 10 },
+      "rationale": "Above roughly 10% wetland coverage, permitting timelines and mitigation cost dominate the schedule.",
+      "imagery_can_verify": true
+    }
+  ],
+  "criteria": {
+    "regulatory": {
+      "label": "Regulatory risk",
+      "description": "How likely this parcel is to clear permitting, zoning, and environmental review without a fight or a map revision. Higher is lower risk.",
+      "factors": [
+        {
+          "id": "zoning_status",
+          "label": "Zoning status",
+          "weight": 0.35,
+          "input": "profile.zoning_status",
+          "scorer": {
+            "type": "categorical",
+            "map": { "by_right": 100, "special_use_permit": 65, "rezoning_required": 25, "denied": 0 }
+          },
+          "imagery_can_verify": false,
+          "verification_note": "Zoning is a legal status. It must come from the jurisdiction's records, not from imagery."
+        },
+        {
+          "id": "interconnection_timeline_months",
+          "label": "Interconnection timeline",
+          "weight": 0.25,
+          "input": "profile.interconnection_timeline_months",
+          "scorer": { "type": "linear_decay", "best": 12, "worst": 72 },
+          "imagery_can_verify": false,
+          "verification_note": "A reported study estimate. Queue position and capacity must be confirmed with the utility."
+        },
+        {
+          "id": "protected_area_distance_m",
+          "label": "Distance to protected area",
+          "weight": 0.2,
+          "input": "evidence.protected_area_distance_m",
+          "scorer": { "type": "linear_gain", "best": 5000, "worst": 100 },
+          "imagery_can_verify": false,
+          "verification_note": "Designation boundaries come from a protected-areas dataset. Imagery shows land cover, not legal designation."
+        },
+        {
+          "id": "wetland_overlap_pct",
+          "label": "Wetland coverage",
+          "weight": 0.2,
+          "input": "evidence.wetland_overlap_pct",
+          "scorer": { "type": "linear_decay", "best": 0, "worst": 10 },
+          "imagery_can_verify": true,
+          "verification_note": "Surface water and saturated vegetation are visible in imagery, but jurisdictional wetland status requires a delineation."
+        }
+      ]
+    },
+    "cost": {
+      "label": "Cost",
+      "description": "Capital and operating cost exposure of this parcel. Higher is cheaper.",
+      "factors": [
+        {
+          "id": "land_cost_usd_per_acre",
+          "label": "Land cost",
+          "weight": 0.25,
+          "input": "profile.land_cost_usd_per_acre",
+          "scorer": { "type": "linear_decay", "best": 5000, "worst": 60000 },
+          "imagery_can_verify": false,
+          "verification_note": "Reported acquisition estimate. Not verifiable from imagery."
+        },
+        {
+          "id": "power_cost_usd_per_mwh",
+          "label": "Power cost",
+          "weight": 0.25,
+          "input": "profile.power_cost_usd_per_mwh",
+          "scorer": { "type": "linear_decay", "best": 30, "worst": 90 },
+          "imagery_can_verify": false,
+          "verification_note": "Reported tariff or PPA estimate. Not verifiable from imagery."
+        },
+        {
+          "id": "water_availability",
+          "label": "Water availability for cooling",
+          "weight": 0.2,
+          "input": "profile.water_availability",
+          "scorer": {
+            "type": "categorical",
+            "map": { "ample": 100, "adequate": 70, "constrained": 30, "none": 0 }
+          },
+          "imagery_can_verify": false,
+          "verification_note": "A visible water body is not an allocation. Withdrawal rights must come from the water authority."
+        },
+        {
+          "id": "mean_slope_pct",
+          "label": "Mean slope",
+          "weight": 0.15,
+          "input": "evidence.mean_slope_pct",
+          "scorer": { "type": "linear_decay", "best": 1, "worst": 12 },
+          "imagery_can_verify": true,
+          "verification_note": "Derived from a terrain model rather than from the image itself. Drives earthwork cost."
+        },
+        {
+          "id": "tax_incentive_pct_capex",
+          "label": "Tax incentive",
+          "weight": 0.15,
+          "input": "profile.tax_incentive_pct_capex",
+          "scorer": { "type": "linear_gain", "best": 30, "worst": 0 },
+          "imagery_can_verify": false,
+          "verification_note": "Reported abatement estimate. Requires confirmation from the taxing authority; most abatements are discretionary."
+        }
+      ]
+    },
+    "community": {
+      "label": "Community and environmental impact",
+      "description": "How much this parcel would disrupt the people and habitat around it. Higher means less disruption. This criterion exists to steer the recommendation away from sites that impose the greatest burden on neighbors.",
+      "factors": [
+        {
+          "id": "residences_within_1km",
+          "label": "Residences within 1 km",
+          "weight": 0.3,
+          "input": "evidence.residences_within_1km",
+          "scorer": { "type": "linear_decay", "best": 0, "worst": 400 },
+          "imagery_can_verify": true,
+          "verification_note": "Building footprints are visible in imagery, but occupancy is not. A counted structure may not be a home."
+        },
+        {
+          "id": "schools_within_1km",
+          "label": "Schools within 1 km",
+          "weight": 0.25,
+          "input": "evidence.schools_within_1km",
+          "scorer": { "type": "linear_decay", "best": 0, "worst": 3 },
+          "imagery_can_verify": false,
+          "verification_note": "A school cannot be reliably told from other buildings in imagery. This must come from a schools dataset."
+        },
+        {
+          "id": "distance_nearest_residence_m",
+          "label": "Distance to nearest residence",
+          "weight": 0.25,
+          "input": "evidence.distance_nearest_residence_m",
+          "scorer": { "type": "linear_gain", "best": 2000, "worst": 100 },
+          "imagery_can_verify": true,
+          "verification_note": "Measured to the nearest structure believed to be a dwelling. Occupancy is unverified."
+        },
+        {
+          "id": "current_land_use",
+          "label": "Current land use",
+          "weight": 0.2,
+          "input": "evidence.current_land_use",
+          "scorer": {
+            "type": "categorical",
+            "map": {
+              "industrial": 100,
+              "brownfield": 95,
+              "fallow": 75,
+              "pasture": 55,
+              "active_cropland": 50,
+              "rural_residential_adjacent": 15,
+              "residential": 0
+            }
+          },
+          "imagery_can_verify": true,
+          "verification_note": "Land cover is visible in imagery. Ownership, tenancy, and whether a field is actively farmed are not."
+        }
+      ]
+    }
+  }
+}

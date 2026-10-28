@@ -1,0 +1,559 @@
+{
+  "dataset": "Earthshaker V1.0 demo fixture",
+  "status": "DEMO DATA — NOT REAL",
+  "notice": "Every value in this file is fictional and was written by hand for a demo. No parcel here corresponds to a real parcel. The coordinates are arbitrary placeholders chosen only so the schematic map has something to draw; they do not indicate that any real location is under consideration. Profile fields (land cost, power cost, interconnection timeline, zoning, incentives, water) are invented, not researched. Imagery-derived and external-dataset fields in \"evidence\" were never observed and carry provenance \"mock\" throughout. Replace this file with real parcels and real upstream profiles before use.",
+  "provenance": {
+    "parcels": "synthetic geometry, generated",
+    "profile_fields": "mock",
+    "evidence_fields": "mock"
+  },
+  "parcels": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-01",
+          "name": "Fallow Creek Tract",
+          "target_acres": 520
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.708337,
+                39.893011
+              ],
+              [
+                -83.688678,
+                39.896216
+              ],
+              [
+                -83.691663,
+                39.906989
+              ],
+              [
+                -83.711322,
+                39.903784
+              ],
+              [
+                -83.708337,
+                39.893011
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-02",
+          "name": "Kestrel Flats",
+          "target_acres": 700
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.636542,
+                39.893966
+              ],
+              [
+                -83.616073,
+                39.891759
+              ],
+              [
+                -83.613458,
+                39.906034
+              ],
+              [
+                -83.633927,
+                39.908241
+              ],
+              [
+                -83.636542,
+                39.893966
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-03",
+          "name": "Thorn Hollow",
+          "target_acres": 400
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.556711,
+                39.892899
+              ],
+              [
+                -83.538596,
+                39.89938
+              ],
+              [
+                -83.543289,
+                39.907101
+              ],
+              [
+                -83.561404,
+                39.90062
+              ],
+              [
+                -83.556711,
+                39.892899
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-04",
+          "name": "Marrow Bend",
+          "target_acres": 450
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.485709,
+                39.89708
+              ],
+              [
+                -83.468574,
+                39.892809
+              ],
+              [
+                -83.464291,
+                39.90292
+              ],
+              [
+                -83.481426,
+                39.907191
+              ],
+              [
+                -83.485709,
+                39.89708
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-05",
+          "name": "Sable Ridge",
+          "target_acres": 600
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.410867,
+                39.893716
+              ],
+              [
+                -83.387875,
+                39.89526
+              ],
+              [
+                -83.389133,
+                39.906284
+              ],
+              [
+                -83.412125,
+                39.90474
+              ],
+              [
+                -83.410867,
+                39.893716
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-06",
+          "name": "Quarry Line",
+          "target_acres": 800
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.70519,
+                39.951184
+              ],
+              [
+                -83.685184,
+                39.960037
+              ],
+              [
+                -83.69481,
+                39.972816
+              ],
+              [
+                -83.714816,
+                39.963963
+              ],
+              [
+                -83.70519,
+                39.951184
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-07",
+          "name": "Pell Meadow",
+          "target_acres": 480
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.636884,
+                39.960608
+              ],
+              [
+                -83.618753,
+                39.954127
+              ],
+              [
+                -83.613116,
+                39.963392
+              ],
+              [
+                -83.631247,
+                39.969873
+              ],
+              [
+                -83.636884,
+                39.960608
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-08",
+          "name": "Larkin Draw",
+          "target_acres": 70
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.553288,
+                39.959606
+              ],
+              [
+                -83.545979,
+                39.960393
+              ],
+              [
+                -83.546712,
+                39.964394
+              ],
+              [
+                -83.554021,
+                39.963607
+              ],
+              [
+                -83.553288,
+                39.959606
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-09",
+          "name": "Hartle Plain",
+          "target_acres": 560
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.486288,
+                39.957656
+              ],
+              [
+                -83.466993,
+                39.954513
+              ],
+              [
+                -83.463712,
+                39.966344
+              ],
+              [
+                -83.483007,
+                39.969487
+              ],
+              [
+                -83.486288,
+                39.957656
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "site_id": "DEMO-10",
+          "name": "Verge Tract",
+          "target_acres": 620
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -83.407402,
+                39.953419
+              ],
+              [
+                -83.387133,
+                39.959073
+              ],
+              [
+                -83.392598,
+                39.970581
+              ],
+              [
+                -83.412867,
+                39.964927
+              ],
+              [
+                -83.407402,
+                39.953419
+              ]
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "profiles": {
+    "DEMO-01": {
+      "land_cost_usd_per_acre": 9000,
+      "power_cost_usd_per_mwh": 42,
+      "interconnection_timeline_months": 20,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 18,
+      "water_availability": "adequate"
+    },
+    "DEMO-02": {
+      "land_cost_usd_per_acre": 5600,
+      "power_cost_usd_per_mwh": 36,
+      "interconnection_timeline_months": 30,
+      "zoning_status": "special_use_permit",
+      "tax_incentive_pct_capex": 25,
+      "water_availability": "adequate"
+    },
+    "DEMO-03": {
+      "land_cost_usd_per_acre": 7000,
+      "power_cost_usd_per_mwh": 39,
+      "interconnection_timeline_months": 24,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 20,
+      "water_availability": "ample"
+    },
+    "DEMO-04": {
+      "land_cost_usd_per_acre": 6200,
+      "power_cost_usd_per_mwh": 37,
+      "interconnection_timeline_months": 18,
+      "zoning_status": "denied",
+      "tax_incentive_pct_capex": 22,
+      "water_availability": "adequate"
+    },
+    "DEMO-05": {
+      "land_cost_usd_per_acre": 11000,
+      "power_cost_usd_per_mwh": 45,
+      "interconnection_timeline_months": 22,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 12,
+      "water_availability": "constrained"
+    },
+    "DEMO-06": {
+      "land_cost_usd_per_acre": 14500,
+      "power_cost_usd_per_mwh": 51,
+      "interconnection_timeline_months": 34,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 8,
+      "water_availability": "adequate"
+    },
+    "DEMO-07": {
+      "land_cost_usd_per_acre": 8200,
+      "power_cost_usd_per_mwh": null,
+      "interconnection_timeline_months": 26,
+      "zoning_status": "special_use_permit",
+      "tax_incentive_pct_capex": null,
+      "water_availability": "adequate"
+    },
+    "DEMO-08": {
+      "land_cost_usd_per_acre": 6800,
+      "power_cost_usd_per_mwh": 38,
+      "interconnection_timeline_months": 16,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 24,
+      "water_availability": "ample"
+    },
+    "DEMO-09": {
+      "land_cost_usd_per_acre": 10500,
+      "power_cost_usd_per_mwh": 44,
+      "interconnection_timeline_months": 28,
+      "zoning_status": "special_use_permit",
+      "tax_incentive_pct_capex": 15,
+      "water_availability": "adequate"
+    },
+    "DEMO-10": {
+      "land_cost_usd_per_acre": 9800,
+      "power_cost_usd_per_mwh": 41,
+      "interconnection_timeline_months": 14,
+      "zoning_status": "by_right",
+      "tax_incentive_pct_capex": 16,
+      "water_availability": "ample"
+    }
+  },
+  "mock_evidence": {
+    "DEMO-01": {
+      "unbuildable_fraction": 0.1,
+      "mean_slope_pct": 2.5,
+      "protected_area_distance_m": 4200,
+      "wetland_overlap_pct": 1,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 25,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1400,
+      "current_land_use": "fallow"
+    },
+    "DEMO-02": {
+      "unbuildable_fraction": 0.08,
+      "mean_slope_pct": 1.5,
+      "protected_area_distance_m": 2600,
+      "wetland_overlap_pct": 0.5,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 180,
+      "schools_within_1km": 1,
+      "distance_nearest_residence_m": 420,
+      "current_land_use": "active_cropland"
+    },
+    "DEMO-03": {
+      "unbuildable_fraction": 0.3,
+      "mean_slope_pct": 4,
+      "protected_area_distance_m": 900,
+      "wetland_overlap_pct": 12,
+      "fema_floodway_overlap_pct": 6.5,
+      "residences_within_1km": 60,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 800,
+      "current_land_use": "fallow"
+    },
+    "DEMO-04": {
+      "unbuildable_fraction": 0.12,
+      "mean_slope_pct": 2.8,
+      "protected_area_distance_m": 3300,
+      "wetland_overlap_pct": 1.2,
+      "fema_floodway_overlap_pct": 0.1,
+      "residences_within_1km": 45,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1150,
+      "current_land_use": "pasture"
+    },
+    "DEMO-05": {
+      "unbuildable_fraction": null,
+      "mean_slope_pct": 6.5,
+      "protected_area_distance_m": 3100,
+      "wetland_overlap_pct": 2,
+      "fema_floodway_overlap_pct": 0.5,
+      "residences_within_1km": 40,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1100,
+      "current_land_use": "pasture"
+    },
+    "DEMO-06": {
+      "unbuildable_fraction": 0.12,
+      "mean_slope_pct": 3,
+      "protected_area_distance_m": 5200,
+      "wetland_overlap_pct": 0.2,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 8,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1900,
+      "current_land_use": "industrial"
+    },
+    "DEMO-07": {
+      "unbuildable_fraction": 0.15,
+      "mean_slope_pct": 2,
+      "protected_area_distance_m": 3600,
+      "wetland_overlap_pct": 1.5,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 55,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 950,
+      "current_land_use": "active_cropland"
+    },
+    "DEMO-08": {
+      "unbuildable_fraction": 0.2,
+      "mean_slope_pct": 2,
+      "protected_area_distance_m": 3000,
+      "wetland_overlap_pct": 0.5,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 30,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1200,
+      "current_land_use": "fallow"
+    },
+    "DEMO-09": {
+      "unbuildable_fraction": 0.12,
+      "mean_slope_pct": 3.5,
+      "protected_area_distance_m": 2900,
+      "wetland_overlap_pct": 1.2,
+      "fema_floodway_overlap_pct": 0.2,
+      "residences_within_1km": 95,
+      "schools_within_1km": 1,
+      "distance_nearest_residence_m": 700,
+      "current_land_use": "active_cropland"
+    },
+    "DEMO-10": {
+      "unbuildable_fraction": 0.1,
+      "mean_slope_pct": 2.2,
+      "protected_area_distance_m": 4800,
+      "wetland_overlap_pct": 0.3,
+      "fema_floodway_overlap_pct": 0,
+      "residences_within_1km": 70,
+      "schools_within_1km": 0,
+      "distance_nearest_residence_m": 1050,
+      "current_land_use": "pasture"
+    }
+  }
+}

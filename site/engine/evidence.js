@@ -122,11 +122,11 @@ export class GeometryEvidenceProvider {
     const geometry = parcel.geometry;
     const source = 'computed from supplied parcel boundary';
     if (!geometry) {
-      return { 'evidence.area_acres': UNKNOWN, 'evidence.buffer': UNKNOWN };
+      return { area_acres: UNKNOWN, buffer: UNKNOWN };
     }
     return {
-      'evidence.area_acres': val(geodesicAreaAcres(geometry), 'derived', { source }),
-      'evidence.buffer': val(bufferGeometry(geometry, this.bufferMetres), 'derived', {
+      area_acres: val(geodesicAreaAcres(geometry), 'derived', { source }),
+      buffer: val(bufferGeometry(geometry, this.bufferMetres), 'derived', {
         source: `${this.bufferMetres} m buffer of supplied parcel boundary`,
       }),
     };
@@ -149,12 +149,12 @@ export class MockEvidenceProvider {
     const row = this.table[parcel.properties?.site_id ?? parcel.site_id] || {};
     const out = {};
     for (const [key, raw] of Object.entries(row)) {
-      out[`evidence.${key}`] = val(raw, 'mock', {
+      out[key] = val(raw, 'mock', {
         source: this.source,
         observed: row.observed ?? this.observed,
       });
     }
-    delete out['evidence.observed'];
+    delete out.observed;
     return out;
   }
 }
@@ -181,12 +181,20 @@ export function buildInputs(site, providers = []) {
     inputs[`profile.${key}`] = profileValue(entry);
   }
 
-  const parcel = site.geometry
-    ? { geometry: site.geometry, properties: { site_id: site.site_id } }
-    : site;
+  // A site may arrive flattened ({site_id, geometry, profile}) or with the raw
+  // GeoJSON Feature kept intact ({parcel, profile}). Both are accepted.
+  const parcel = site.parcel
+    ? site.parcel
+    : site.geometry
+      ? { geometry: site.geometry, properties: { site_id: site.site_id } }
+      : site;
 
+  // Providers return bare keys; the `evidence.` namespace is applied here so a
+  // provider never has to know how its output will be addressed.
   for (const provider of providers) {
-    Object.assign(inputs, provider.evidenceFor(parcel));
+    for (const [key, value] of Object.entries(provider.evidenceFor(parcel) || {})) {
+      inputs[key.startsWith('evidence.') ? key : `evidence.${key}`] = value;
+    }
   }
 
   inputs['evidence.developable_area_acres'] = derive(

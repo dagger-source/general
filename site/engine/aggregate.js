@@ -10,11 +10,23 @@ const CRITERIA = ['regulatory', 'cost', 'community'];
 
 export function weightedTotal(criterionScores, weights, mode = 'pessimistic') {
   let total = 0;
-  for (const key of Object.keys(criterionScores)) {
-    total += (weights[key] ?? 0) * criterionScores[key][mode];
+  // Iterate the known criteria rather than the object's own keys, so that a
+  // scored site carrying extra fields (site_id, name) totals the same as a bare
+  // criterion-scores object.
+  for (const key of CRITERIA) {
+    const score = criterionScores?.[key];
+    if (!score) continue;
+    total += (weights[key] ?? 0) * (score[mode] ?? 0);
   }
   return total;
 }
+
+/**
+ * Criterion scores may be nested under `.criteria` or sit directly on the
+ * scored site. Both shapes are accepted so callers can pass `scoreSite()`
+ * output with identity fields merged in, or kept separate.
+ */
+const critsOf = (s) => s.criteria ?? s;
 
 /** Descending total, ties broken by ascending site_id so results are stable. */
 function compare(a, b) {
@@ -23,13 +35,18 @@ function compare(a, b) {
 }
 
 export function rankSites(scored, weights) {
-  const rows = scored.map((s) => ({
+  // Defence in depth. The pipeline already passes only shortlisted sites, but a
+  // site that carries an explicit non-shortlist classification is never ranked
+  // here either: an excluded or held site must not acquire a rank by accident.
+  const rows = scored
+    .filter((s) => s.classification === undefined || s.classification === 'shortlist')
+    .map((s) => ({
     site_id: s.site_id,
     name: s.name,
-    total: weightedTotal(s.criteria, weights, 'pessimistic'),
-    totalOptimistic: weightedTotal(s.criteria, weights, 'optimistic'),
-    criteria: s.criteria,
-  }));
+    total: weightedTotal(critsOf(s), weights, 'pessimistic'),
+    totalOptimistic: weightedTotal(critsOf(s), weights, 'optimistic'),
+    criteria: critsOf(s),
+    }));
   rows.sort(compare);
   rows.forEach((r, i) => {
     r.rank = i + 1;
@@ -40,7 +57,7 @@ export function rankSites(scored, weights) {
 function winnerUnder(scored, weights) {
   let best = null;
   for (const s of scored) {
-    const total = weightedTotal(s.criteria, weights, 'pessimistic');
+    const total = weightedTotal(critsOf(s), weights, 'pessimistic');
     const row = { site_id: s.site_id, total };
     if (best === null || compare(row, best) < 0) best = row;
   }
@@ -55,7 +72,7 @@ export function topsis(scored, weights) {
     return out;
   }
 
-  const matrix = scored.map((s) => CRITERIA.map((k) => s.criteria[k]?.pessimistic ?? 0));
+  const matrix = scored.map((s) => CRITERIA.map((k) => critsOf(s)[k]?.pessimistic ?? 0));
   const norms = CRITERIA.map((_, j) =>
     Math.sqrt(matrix.reduce((sum, row) => sum + row[j] * row[j], 0)),
   );
@@ -77,7 +94,7 @@ export function topsis(scored, weights) {
 
 /** Non-dominated on the three pessimistic criterion scores. */
 export function paretoFrontier(scored) {
-  const vec = (s) => CRITERIA.map((k) => s.criteria[k]?.pessimistic ?? 0);
+  const vec = (s) => CRITERIA.map((k) => critsOf(s)[k]?.pessimistic ?? 0);
   return scored
     .filter((s) => {
       const a = vec(s);

@@ -34,24 +34,40 @@ export function normalizeWeights(raw) {
   return Object.fromEntries(keys.map((k, i) => [k, vals[i] / sum]));
 }
 
-export function runPipeline({ sites, rubric, weights, providers = [], options = {} }) {
+/** Accepts either a flattened site or one wrapping a GeoJSON Feature as `parcel`. */
+function identify(site) {
+  const feature = site.parcel ?? site;
+  const props = feature.properties ?? {};
+  const site_id = site.site_id ?? props.site_id;
+  return {
+    site_id,
+    name: site.name ?? props.name ?? site_id,
+    geometry: site.geometry ?? feature.geometry ?? null,
+  };
+}
+
+export function runPipeline({ sites, rubric, weights, providers, options = {} }) {
   const opts = { ...DEFAULTS, ...options };
+  // The documented signature carries providers in `options`; a top-level
+  // `providers` is accepted too, since the dashboard reads more clearly that way.
+  const activeProviders = providers ?? options.providers ?? [];
   const w = normalizeWeights(weights);
 
   const detail = {};
   let demo = false;
 
   for (const site of sites) {
-    const inputs = buildInputs(site, providers);
+    const { site_id, name, geometry } = identify(site);
+    const inputs = buildInputs(site, activeProviders);
     const constraints = evaluateConstraints(inputs, rubric);
     const stage = classify(constraints);
     const criteria = scoreSite(rubric, inputs);
     if (containsMock(inputs)) demo = true;
 
-    detail[site.site_id] = {
-      site_id: site.site_id,
-      name: site.name,
-      geometry: site.geometry,
+    detail[site_id] = {
+      site_id,
+      name,
+      geometry,
       buffer: inputs['evidence.buffer']?.value ?? null,
       inputs,
       constraints,
@@ -65,7 +81,7 @@ export function runPipeline({ sites, rubric, weights, providers = [], options = 
     };
   }
 
-  const candidates = sites.map((s) => s.site_id);
+  const candidates = sites.map((s) => identify(s).site_id);
   const shortlistIds = candidates.filter((id) => detail[id].stage === 'shortlist');
   const excluded = candidates.filter((id) => detail[id].stage === 'excluded');
   const held = candidates.filter((id) => detail[id].stage === 'held');

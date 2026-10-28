@@ -1,0 +1,4 @@
+# Netlify deploy settings. Only the "site" folder is published;
+# everything else in the repo (including .claude/) stays private.
+[build]
+  publish = "site"
